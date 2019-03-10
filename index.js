@@ -13,7 +13,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port);
 
-console.log('Montera starting...');
-console.log('Montera running at http://' + process.env.APP_HOST + ':' + port + ' in ' + process.env.NODE_ENV + ' mode.');
+console.log('ICT4510 API service running at http://' + process.env.APP_HOST + ':' + port + ' in ' + process.env.NODE_ENV + ' mode.');
 
 module.exports = app;
