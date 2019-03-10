@@ -1,6 +1,8 @@
 'use strict';
 
-require('dotenv').load();
+if (process.env.NODE_ENV === undefined) {
+    require('dotenv').load();
+}
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
