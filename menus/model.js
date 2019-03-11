@@ -11,7 +11,6 @@ const config = require('../config/config.js'),
         }
     });
 
-// http://localhost:4510/api/menus?api_key=1c3c12413e929078b3c48a9e0367eac1
 exports.save = function (req, callback) {
 
     let Menu = req.body;
@@ -43,7 +42,6 @@ exports.save = function (req, callback) {
     });
 };
 
-// http://localhost:4510/api/menus?api_key=1c3c12413e929078b3c48a9e0367eac1
 exports.read = function (req, callback) {
 
     let api_key = req.query.api_key;
@@ -80,10 +78,21 @@ exports.read = function (req, callback) {
 
 exports.delete = function (req, callback) {
 
-    callback({
-        status: 204,
-        data: {
-            message: 'Menu item deleted'
-        }
-    });
+    let id = req.query.id;
+
+    knex('menus')
+        .where('id', id)
+        .del()
+        .then(function () {
+
+            callback({
+                status: 204,
+                data: {
+                    message: 'Menu item deleted'
+                }
+            });
+        })
+        .catch(function (error) {
+            throw error;
+        });
 };
