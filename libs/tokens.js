@@ -27,7 +27,9 @@ exports.verify = function (req, res, next) {
         jwt.verify(token, config.secretKey, function (error, decoded) {
 
             if (error) {
-                throw error;
+                res.status(401).send({
+                    message: 'Unauthorized request ' + error
+                });
             }
 
             req.decoded = decoded;
