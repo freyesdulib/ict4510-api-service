@@ -36,7 +36,8 @@ exports.verify = function (req, res, next) {
 
     } else {
 
-        throw 'Unable to verify token';
-
+        res.status(401).send({
+            message: 'Unauthorized request'
+        });
     }
 };
