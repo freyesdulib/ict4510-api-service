@@ -30,6 +30,8 @@ exports.verify = function (req, res, next) {
                 res.status(401).send({
                     message: 'Unauthorized request ' + error
                 });
+
+                return false;
             }
 
             req.decoded = decoded;
