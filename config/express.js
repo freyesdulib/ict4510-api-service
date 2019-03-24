@@ -22,7 +22,7 @@ module.exports = function () {
     app.use(function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", config.requestOrigin);
         res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'DELETE');
-        res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+        res.setHeader("Access-Control-Allow-Headers", "x-access-token");
         next();
     });
 
