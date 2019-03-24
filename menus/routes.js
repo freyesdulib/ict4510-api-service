@@ -9,7 +9,7 @@ module.exports = function (app) {
         .post(token.verify, Menus.save);
 
     app.route('/api/menus')
-        .get(token.verify, Menus.read);
+        .get(Menus.read);
 
     app.route('/api/menus')
         .delete(token.verify, Menus.delete);
