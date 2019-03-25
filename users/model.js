@@ -83,7 +83,9 @@ exports.get = function (req, callback) {
 
 exports.authenticate = function (req, callback) {
 
-    if (req.body === undefined) {
+    let User = req.body;
+
+    if (User === undefined) {
         callback({
             status: 400,
             data: {
@@ -92,7 +94,15 @@ exports.authenticate = function (req, callback) {
         });
     }
 
-    let User = req.body;
+    if (User.username.length === 0 || User.password.length === 0) {
+        callback({
+            status: 401,
+            data: {
+                message: 'Authentication failed'
+            }
+        });
+        return false;
+    }
 
     knex('users')
         .where({
