@@ -80,6 +80,15 @@ exports.delete = function (req, callback) {
 
     let id = req.query.id;
 
+    if (id === undefined || id.length === 0) {
+        callback({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    }
+
     knex('menus')
         .where('id', id)
         .del()
