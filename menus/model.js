@@ -78,9 +78,17 @@ exports.read = function (req, callback) {
 
 exports.delete = function (req, callback) {
 
-    let id = req.query.id;
+    let api_key = req.query.api_key,
+        id = req.query.id;
 
     if (id === undefined || id.length === 0) {
+        callback({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    } else if (api_key === undefined || api_key.length === 0) {
         callback({
             status: 400,
             data: {
@@ -90,7 +98,10 @@ exports.delete = function (req, callback) {
     }
 
     knex('menus')
-        .where('id', id)
+        .where({
+            api_key: api_key,
+            id: id
+        })
         .del()
         .then(function () {
 
