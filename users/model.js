@@ -46,7 +46,6 @@ exports.save = function (req, callback) {
     });
 };
 
-// http://localhost:4510/api/users?api_key=1c3c12413e929078b3c48a9e0367eac1
 exports.get = function (req, callback) {
 
     let api_key = req.query.api_key;
@@ -64,7 +63,7 @@ exports.get = function (req, callback) {
         .where({
             api_key: api_key
         })
-        .select('username', 'first_name', 'last_name')
+        .select('id', 'username', 'first_name', 'last_name')
         .then(function (data) {
 
             let user = data[0];
@@ -79,6 +78,40 @@ exports.get = function (req, callback) {
         .catch(function (error) {
             throw 'ERROR: unable to get user ' + error;
         });
+};
+
+exports.update = function (req, callback) {
+
+    let api_key = req.query.api_key,
+        User = req.body;
+
+    if (User === undefined || api_key === undefined) {
+        callback({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    }
+
+    let id = User.id;
+    delete User.id;
+
+    knex('users')
+        .where({
+            api_key: api_key,
+            id: id
+        })
+        .update(User)
+        .then(function (data) {
+            callback({
+                status: 204
+            });
+        })
+        .catch(function (error) {
+            throw 'ERROR: unable to update record ' + error;
+        });
+
 };
 
 exports.authenticate = function (req, callback) {

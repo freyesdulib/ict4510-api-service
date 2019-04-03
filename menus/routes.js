@@ -6,12 +6,8 @@ const Menus = require('../menus/controller'),
 module.exports = function (app) {
 
     app.route('/api/menus')
-        .post(token.verify, Menus.save);
-
-    app.route('/api/menus')
-        .get(Menus.read);
-
-    app.route('/api/menus')
+        .post(token.verify, Menus.save)
+        .get(Menus.read)
+        .put(token.verify, Menus.update)
         .delete(token.verify, Menus.delete);
-
 };

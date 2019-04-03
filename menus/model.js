@@ -76,19 +76,46 @@ exports.read = function (req, callback) {
         });
 };
 
-exports.delete = function (req, callback) {
+exports.update = function (req, callback) {
 
     let api_key = req.query.api_key,
-        id = req.query.id;
+        Menu = req.body;
 
-    if (id === undefined || id.length === 0) {
+    if (Menu.id === undefined || api_key === undefined) {
         callback({
             status: 400,
             data: {
                 message: 'Bad Request'
             }
         });
-    } else if (api_key === undefined || api_key.length === 0) {
+    }
+
+    let id = Menu.id;
+    delete Menu.id;
+
+    knex('menus')
+        .where({
+            api_key: api_key,
+            id: id
+        })
+        .update(Menu)
+        .then(function (data) {
+            callback({
+                status: 204
+            });
+        })
+        .catch(function (error) {
+            throw 'ERROR: unable to update record ' + error;
+        });
+
+};
+
+exports.delete = function (req, callback) {
+
+    let api_key = req.query.api_key,
+        id = req.query.id;
+
+    if (id === undefined || api_key === undefined) {
         callback({
             status: 400,
             data: {
@@ -106,10 +133,7 @@ exports.delete = function (req, callback) {
         .then(function () {
 
             callback({
-                status: 204,
-                data: {
-                    message: 'Menu item deleted'
-                }
+                status: 204
             });
         })
         .catch(function (error) {

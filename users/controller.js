@@ -13,3 +13,9 @@ exports.get = function (req, res) {
         res.status(data.status).send(data.data);
     });
 };
+
+exports.update = function (req, res) {
+    Users.update(req, function (data) {
+        res.status(data.status).send(data.data);
+    });
+};
