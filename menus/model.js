@@ -62,12 +62,10 @@ exports.read = function (req, callback) {
         .select('id', 'item', 'description', 'price')
         .then(function (data) {
 
-            let menu = data;
-
             callback({
                 status: 200,
                 data: {
-                    menu: menu
+                    menu: data
                 }
             });
         })
