@@ -1,12 +1,14 @@
 'use strict';
 
+// TODO: test
 const Users = require('../users/controller'),
-    token = require('../libs/tokens');
+    token = require('../libs/tokens'),
+    fields = require('../libs/validate');
 
 module.exports = function (app) {
 
     app.route('/api/users')
-        .post(Users.save)
-        .put(token.verify, Users.update)
+        .post(fields.validate, Users.save)
+        .put(token.verify, fields.validate, Users.update)
         .get(token.verify, Users.get);
 };

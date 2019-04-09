@@ -1,9 +1,10 @@
 'use strict';
 
-var Auth = require('../auth/controller');
+const Auth = require('../auth/controller'),
+    fields = require('../libs/validate');
 
 module.exports = function (app) {
 
     app.route('/api/login')
-        .post(Auth.authenticate);
+        .post(fields.validate, Auth.authenticate);
 };
