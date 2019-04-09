@@ -46,7 +46,7 @@ exports.save = function (req, callback) {
     });
 };
 
-exports.get = function (req, callback) {
+exports.read = function (req, callback) {
 
     let api_key = req.query.api_key;
 
@@ -66,12 +66,10 @@ exports.get = function (req, callback) {
         .select('id', 'username', 'first_name', 'last_name')
         .then(function (data) {
 
-            let user = data[0];
-
             callback({
                 status: 200,
                 data: {
-                    user: user
+                    user: data[0]
                 }
             });
         })

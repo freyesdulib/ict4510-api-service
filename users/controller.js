@@ -8,8 +8,8 @@ exports.save = function (req, res) {
     });
 };
 
-exports.get = function (req, res) {
-    Users.get(req, function (data) {
+exports.read = function (req, res) {
+    Users.read(req, function (data) {
         res.status(data.status).send(data.data);
     });
 };
