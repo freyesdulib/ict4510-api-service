@@ -79,5 +79,5 @@ logs/*.log
 logs/*.gz
 tmp
 tests
-# *.sql
+*.sql
 
