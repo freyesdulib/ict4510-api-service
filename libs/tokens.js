@@ -10,12 +10,10 @@ exports.create = function (username) {
         iss: config.tokenIssuer
     };
 
-    let token = jwt.sign(tokenData, config.secretKey, {
+    return jwt.sign(tokenData, config.secretKey, {
         algorithm: config.tokenAlgo,
         expiresIn: config.tokenExpire
     });
-
-    return token;
 };
 
 exports.verify = function (req, res, next) {
