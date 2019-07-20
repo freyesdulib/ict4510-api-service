@@ -20,13 +20,12 @@ module.exports = function () {
         app.use(compress());
     }
 
-    let cors_options = {
+    app.use(cors({
         'origin': '*',
         'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
         'preflightContinue': true
-    };
+    }));
 
-    app.use(cors(cors_options));
     app.use(bodyParser.urlencoded({
         extended: true
     }));
