@@ -6,6 +6,7 @@ const http = require('http'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     helmet = require('helmet'),
+    cors = require('cors'),
     config = require('../config/config');
 
 module.exports = function () {
@@ -19,13 +20,23 @@ module.exports = function () {
         app.use(compress());
     }
 
-    // TODO: refactor
+    /*
     app.use(function(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET', 'POST', 'PUT', 'OPTIONS', 'DELETE');
         res.header('Access-Control-Allow-Headers', '*');
         next();
     });
+    */
+
+    let cors_options = {
+        'origin': '*',
+        'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
+        'preflightContinue': true
+    };
+
+    app.use(cors(cors_options));
+    // app.options('*', cors());
 
     app.use(bodyParser.urlencoded({
         extended: true
