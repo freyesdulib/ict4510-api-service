@@ -20,15 +20,6 @@ module.exports = function () {
         app.use(compress());
     }
 
-    /*
-    app.use(function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET', 'POST', 'PUT', 'OPTIONS', 'DELETE');
-        res.header('Access-Control-Allow-Headers', '*');
-        next();
-    });
-    */
-
     let cors_options = {
         'origin': '*',
         'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
@@ -36,8 +27,6 @@ module.exports = function () {
     };
 
     app.use(cors(cors_options));
-    // app.options('*', cors());
-
     app.use(bodyParser.urlencoded({
         extended: true
     }));
