@@ -43,10 +43,9 @@ module.exports = function () {
     };
 
     // app.options('*', cors());
-
-    // app.use(cors(corsOptions));
     app.options('/api/login', cors());
     app.options('/api/menus', cors());
+    app.use(cors(corsOptions));
 
     app.use(bodyParser.urlencoded({
         extended: true
