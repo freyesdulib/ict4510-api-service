@@ -43,9 +43,6 @@ module.exports = function () {
     };
 
     // app.options('*', cors());
-    app.options('/api/login', cors());
-    app.options('/api/menus', cors());
-    app.use(cors(corsOptions));
 
     app.use(bodyParser.urlencoded({
         extended: true
@@ -59,6 +56,11 @@ module.exports = function () {
     require('../auth/routes')(app);
     require('../menus/routes')(app);
     require('../users/routes')(app);
+
+
+    app.options('/api/login', cors());
+    app.options('/api/menus', cors());
+    app.use(cors(corsOptions));
 
     return server;
 };
