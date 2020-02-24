@@ -20,11 +20,27 @@ module.exports = function () {
         app.use(compress());
     }
 
+    /*
     app.use(cors({
         'origin': '*',
         'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
         'preflightContinue': true
     }));
+    */
+
+    let whitelist = ['http://localhost', 'https://ict4510app.firebaseapp.com'];
+    let corsOptions = {
+        origin: function (origin, callback) {
+            if (whitelist.indexOf(origin) !== -1) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+        'preflightContinue': true
+    };
+
+    app.use(cors(corsOptions));
 
     app.use(bodyParser.urlencoded({
         extended: true
