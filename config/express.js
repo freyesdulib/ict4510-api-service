@@ -31,7 +31,7 @@ module.exports = function () {
     let whitelist = ['http://localhost', 'https://ict4510app.firebaseapp.com'];
     let corsOptions = {
         origin: function (origin, callback) {
-            console.log(origin);
+            console.log('origin: ', origin);
             if (whitelist.indexOf(origin) !== -1) {
                 callback(null, true);
             } else {
@@ -42,8 +42,6 @@ module.exports = function () {
         'preflightContinue': true
     };
 
-    // app.options('*', cors());
-
     app.use(bodyParser.urlencoded({
         extended: true
     }));
@@ -52,15 +50,15 @@ module.exports = function () {
     app.use(methodOverride());
     app.use(helmet());
 
+    // app.options('/api/login', cors());
+    // app.options('/api/menus', cors());
+    app.options('*', cors());
+    app.use(cors(corsOptions));
+
     require('../ping/routes')(app);
     require('../auth/routes')(app);
     require('../menus/routes')(app);
     require('../users/routes')(app);
-
-
-    app.options('/api/login', cors());
-    app.options('/api/menus', cors());
-    app.use(cors(corsOptions));
 
     return server;
 };
