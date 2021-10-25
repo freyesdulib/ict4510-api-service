@@ -128,16 +128,26 @@ exports.authenticate = function (req, callback) {
         });
         return false;
     }
-    console.log(User.username);
+
     DB('users')
         .where({
             username: User.username
         })
         .select('username', 'password', 'first_name', 'last_name', 'api_key')
         .then(function (data) {
-            // TODO: handle users not in system
 
-            console.log(data);
+            if (data.length === 0) {
+
+                callback({
+                    status: 401,
+                    data: {
+                        message: 'User not found.'
+                    }
+                });
+
+                return false;
+            }
+
             let user = data[0],
                 isAuth = BCRYPT.verify(User.password, user.password);
 
