@@ -1,61 +1,48 @@
 'use strict';
 
-const http = require('http'),
-    express = require('express'),
-    compress = require('compression'),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override'),
-    helmet = require('helmet'),
-    cors = require('cors'),
-    config = require('../config/config');
+const HTTP = require('http'),
+    EXPRESS = require('express'),
+    COMPRESS = require('compression'),
+    BODYPARSER = require('body-parser'),
+    METHODOVERRIDE = require('method-override'),
+    HELMET = require('helmet'),
+    CORS = require('cors'),
+    XSS = require('../libs/dom');
 
 module.exports = function () {
 
-    const app = express(),
-        server = http.createServer(app);
+    const APP = EXPRESS(),
+        SERVER = HTTP.createServer(APP);
 
     if (process.env.NODE_ENV === 'development') {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     } else if (process.env.NODE_ENV === 'production') {
-        app.use(compress());
+        APP.use(COMPRESS());
     }
 
-    /*
-    let whitelist = ['http://localhost', 'https://ict4510app.firebaseapp.com'];
-    let corsOptions = {
-        origin: function (origin, callback) {
-            console.log('origin: ', origin);
-            if (whitelist.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
-        'preflightContinue': true
-    };
-    */
-
-    app.use(bodyParser.urlencoded({
+    APP.use(BODYPARSER.urlencoded({
         extended: true
     }));
 
-    app.use(bodyParser.json());
-    app.use(methodOverride());
-    app.use(helmet());
-
-    app.options('*', cors());
-    // app.use(cors(corsOptions));
-    app.use(cors({
+    APP.use(BODYPARSER.json());
+    APP.use(METHODOVERRIDE());
+    APP.use(HELMET());
+    APP.use(EXPRESS.static('./public'));
+    APP.use(XSS.sanitize_req_query);
+    APP.use(XSS.sanitize_req_body);
+    APP.set('views', './views');
+    APP.set('view engine', 'ejs');
+    APP.use(CORS({
         'origin': '*',
         'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
         'preflightContinue': true
     }));
 
-    require('../ping/routes')(app);
-    require('../auth/routes')(app);
-    require('../menus/routes')(app);
-    require('../users/routes')(app);
+    require('../client/routes')(APP);
+    require('../ping/routes')(APP);
+    require('../auth/routes')(APP);
+    require('../menus/routes')(APP);
+    require('../users/routes')(APP);
 
-    return server;
+    return SERVER;
 };

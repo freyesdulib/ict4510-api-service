@@ -7,7 +7,7 @@ const Users = require('../users/controller'),
 module.exports = function (app) {
 
     app.route('/api/users')
-        .post(fields.validate, Users.save)
-        .put(token.verify, fields.validate, Users.update)
+        .post(fields.validate_user, Users.save)
+        .put(token.verify, fields.validate_user, Users.update)
         .get(token.verify, Users.read);
 };

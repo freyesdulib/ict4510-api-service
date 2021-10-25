@@ -1,16 +1,12 @@
 'use strict';
 
-const config = require('../config/config.js'),
-    knex = require('knex')({
-        client: 'mysql2',
-        connection: {
-            host: config.dbHost,
-            user: config.dbUser,
-            password: config.dbPassword,
-            database: config.dbName
-        }
-    });
+const db = require('../config/db')();
 
+/**
+ * Saves menu item to database
+ * @param req
+ * @param callback
+ */
 exports.save = function (req, callback) {
 
     let Menu = req.body;
@@ -25,7 +21,7 @@ exports.save = function (req, callback) {
         });
     }
 
-    knex('menus')
+    db('menus')
         .insert(Menu)
         .then(function (data) {
             console.log(data);
@@ -45,20 +41,17 @@ exports.save = function (req, callback) {
 exports.read = function (req, callback) {
 
     let api_key = req.query.api_key;
+    let id = req.query.id;
+    let whereObj = {};
 
-    if (api_key === undefined || api_key.length === 0) {
-        callback({
-            status: 400,
-            data: {
-                message: 'Bad Request'
-            }
-        });
+    whereObj.api_key = api_key;
+
+    if (id !== undefined) {
+        whereObj.id = id;
     }
 
-    knex('menus')
-        .where({
-            api_key: api_key
-        })
+    db('menus')
+        .where(whereObj)
         .select('id', 'item', 'description', 'price')
         .then(function (data) {
 
@@ -76,10 +69,10 @@ exports.read = function (req, callback) {
 
 exports.update = function (req, callback) {
 
-    let api_key = req.query.api_key,
-        Menu = req.body;
+    let api_key = req.query.api_key;
+    let Menu = req.body;
 
-    if (Menu.id === undefined || api_key === undefined) {
+    if (Menu.id === undefined) {
         callback({
             status: 400,
             data: {
@@ -91,7 +84,7 @@ exports.update = function (req, callback) {
     let id = Menu.id;
     delete Menu.id;
 
-    knex('menus')
+    db('menus')
         .where({
             api_key: api_key,
             id: id
@@ -110,10 +103,10 @@ exports.update = function (req, callback) {
 
 exports.delete = function (req, callback) {
 
-    let api_key = req.query.api_key,
-        id = req.query.id;
+    let api_key = req.query.api_key;
+    let id = req.query.id;
 
-    if (id === undefined || api_key === undefined) {
+    if (id === undefined) {
         callback({
             status: 400,
             data: {
@@ -122,7 +115,7 @@ exports.delete = function (req, callback) {
         });
     }
 
-    knex('menus')
+    db('menus')
         .where({
             api_key: api_key,
             id: id
@@ -138,3 +131,31 @@ exports.delete = function (req, callback) {
             throw error;
         });
 };
+
+/*
+exports.find_by_id = function (req, callback) {
+
+    let api_key = req.query.api_key;
+    let id = req.query.id;
+
+    db('menus')
+        .where({
+            api_key: api_key,
+            id: id
+        })
+        .select('id', 'item', 'description', 'price')
+        .then(function (data) {
+
+            callback({
+                status: 200,
+                data: {
+                    menu: data
+                }
+            });
+        })
+        .catch(function (error) {
+            throw 'ERROR: unable to get menu ' + error;
+        });
+};
+
+ */

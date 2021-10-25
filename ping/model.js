@@ -6,8 +6,8 @@ exports.get = function (req, callback) {
         status: 200,
         data: {
             info: {
-                version: '1.0',
-                description: 'ICT4510 Course API Service'
+                version: '2.0',
+                description: 'ICT4510 Course API Service | Provides example code for students to review.'
             }
         }
     });
