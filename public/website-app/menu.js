@@ -8,8 +8,8 @@
 
 const menuModule = (function () {
 
-    const API_KEY = get_api_key();
-    const URL = get_api_url() + 'api/menus?api_key=' + API_KEY;
+    const API_KEY = configModule.get_api_key();
+    const URL = configModule.get_api_url() + 'api/menus?api_key=' + API_KEY;
     let obj = {};
 
     /**
@@ -46,7 +46,7 @@ const menuModule = (function () {
         // TODO: randomize images  menu-1.jpg - 5 total
         for (let i = 0;i<menu.length;i++) {
             html += `<div class="tm-product">
-            <img src="assets/img/menu-1.jpg" alt="Product">
+            <img src="website-assets/img/menu-1.jpg" alt="Product">
             <div class="tm-product-text">
             <h3 class="tm-product-title">${menu[i].item}</h3>
             <p class="tm-product-description">${menu[i].description}</p>

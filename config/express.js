@@ -38,7 +38,7 @@ module.exports = function () {
         'preflightContinue': true
     }));
 
-    require('../client/routes')(APP);
+    require('../website/routes')(APP);
     require('../ping/routes')(APP);
     require('../auth/routes')(APP);
     require('../menus/routes')(APP);

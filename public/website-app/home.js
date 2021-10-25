@@ -10,8 +10,8 @@ const homeModule = (function () {
 
     'use strict';
 
-    const API_KEY = get_api_key();
-    const URL = get_api_url() + 'api/menus?api_key=' + API_KEY;
+    const API_KEY = configModule.get_api_key();
+    const URL = configModule.get_api_url() + 'api/menus?api_key=' + API_KEY;
     let obj = {};
 
     /**

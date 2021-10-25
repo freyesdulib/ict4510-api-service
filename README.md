@@ -10,7 +10,7 @@
 
 ### Background
 
-Final Project Example Application.
+Final Project Example Application.  
 
 ### Contributing
 

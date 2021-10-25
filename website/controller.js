@@ -1,15 +1,15 @@
 'use strict';
 
 exports.get_home_page = function (req, res) {
-    res.render('home');
+    res.render('website-home');
 };
 
 exports.get_menu_page = function (req, res) {
-    res.render('menu');
+    res.render('website-menu');
 };
 
 exports.get_contact_page = function (req, res) {
-    res.render('contact');
+    res.render('website-contact');
 };
 
 exports.get_login_page = function (req, res) {
