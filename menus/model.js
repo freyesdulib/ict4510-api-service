@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('../config/db')();
+const DB = require('../config/db')();
 
 /**
  * Saves menu item to database
@@ -21,7 +21,7 @@ exports.save = function (req, callback) {
         });
     }
 
-    db('menus')
+    DB('menus')
         .insert(Menu)
         .then(function (data) {
             console.log(data);
@@ -50,7 +50,7 @@ exports.read = function (req, callback) {
         whereObj.id = id;
     }
 
-    db('menus')
+    DB('menus')
         .where(whereObj)
         .select('id', 'item', 'description', 'price')
         .then(function (data) {
@@ -84,7 +84,7 @@ exports.update = function (req, callback) {
     let id = Menu.id;
     delete Menu.id;
 
-    db('menus')
+    DB('menus')
         .where({
             api_key: api_key,
             id: id
@@ -115,7 +115,7 @@ exports.delete = function (req, callback) {
         });
     }
 
-    db('menus')
+    DB('menus')
         .where({
             api_key: api_key,
             id: id
@@ -131,31 +131,3 @@ exports.delete = function (req, callback) {
             throw error;
         });
 };
-
-/*
-exports.find_by_id = function (req, callback) {
-
-    let api_key = req.query.api_key;
-    let id = req.query.id;
-
-    db('menus')
-        .where({
-            api_key: api_key,
-            id: id
-        })
-        .select('id', 'item', 'description', 'price')
-        .then(function (data) {
-
-            callback({
-                status: 200,
-                data: {
-                    menu: data
-                }
-            });
-        })
-        .catch(function (error) {
-            throw 'ERROR: unable to get menu ' + error;
-        });
-};
-
- */

@@ -1,13 +1,13 @@
 'use strict';
 
-const Users = require('../users/controller'),
-    token = require('../libs/tokens'),
-    fields = require('../libs/validate');
+const USERS = require('../users/controller'),
+    TOKEN = require('../libs/tokens'),
+    FIELDS = require('../libs/validate');
 
 module.exports = function (app) {
 
     app.route('/api/users')
-        .post(fields.validate_user, Users.save)
-        .put(token.verify, fields.validate_user, Users.update)
-        .get(token.verify, Users.read);
+        .post(FIELDS.validate_user, USERS.save)
+        .put(TOKEN.verify, FIELDS.validate_user, USERS.update)
+        .get(TOKEN.verify, USERS.read);
 };

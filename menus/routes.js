@@ -1,14 +1,14 @@
 'use strict';
 
-const Menus = require('../menus/controller'),
-    token = require('../libs/tokens'),
-    fields = require('../libs/validate');
+const MENUS = require('../menus/controller'),
+    TOKEN = require('../libs/tokens'),
+    FIELDS = require('../libs/validate');
 
 module.exports = function (app) {
 
     app.route('/api/menus')
-        .post(token.verify, fields.validate_menu_item, Menus.save)
-        .get(token.verify, Menus.read)
-        .put(token.verify, fields.validate_menu_item, Menus.update)
-        .delete(token.verify, Menus.delete);
+        .post(TOKEN.verify, FIELDS.validate_menu_item, MENUS.save)
+        .get(TOKEN.verify, MENUS.read)
+        .put(TOKEN.verify, FIELDS.validate_menu_item, MENUS.update)
+        .delete(TOKEN.verify, MENUS.delete);
 };

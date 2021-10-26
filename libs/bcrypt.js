@@ -1,6 +1,6 @@
 'use strict';
 
-const bcrypt = require('bcrypt');
+const BCRYPT = require('bcrypt');
 
 exports.encrypt = function (val) {
     const salt = genSalt();
@@ -8,14 +8,14 @@ exports.encrypt = function (val) {
 };
 
 exports.verify = function (val, hash) {
-    return bcrypt.compareSync(val, hash)
+    return BCRYPT.compareSync(val, hash)
 };
 
 const genSalt = function () {
     const SALT_WORK_FACTOR = 10;
-    return bcrypt.genSaltSync(SALT_WORK_FACTOR);
+    return BCRYPT.genSaltSync(SALT_WORK_FACTOR);
 };
 
 const hash = function (val, salt) {
-    return bcrypt.hashSync(val, salt);
+    return BCRYPT.hashSync(val, salt);
 };

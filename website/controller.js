@@ -13,9 +13,9 @@ exports.get_contact_page = function (req, res) {
 };
 
 exports.get_login_page = function (req, res) {
-    res.render('login');
+    res.render('admin-login');
 };
 
 exports.get_dashboard_page = function (req, res) {
-    res.render('dashboard');
+    res.render('admin-dashboard');
 };
