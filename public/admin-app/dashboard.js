@@ -11,6 +11,11 @@ const dashboardModule = (function () {
     'use strict';
 
     const User = JSON.parse(window.localStorage.getItem('user'));
+
+    if (User === null) {
+        logout();
+    }
+
     const MENU_ENDPOINT = `${get_api_url()}api/menus?api_key=${User.user.api_key}`;
 
     let obj = {};
@@ -349,7 +354,7 @@ const dashboardModule = (function () {
         let profile_exists = window.localStorage.getItem('user');
 
         if (profile_exists === null) {
-            window.location.replace('/login');
+            logout();
         } else {
             display_profile_info();
             get_menu_items();
