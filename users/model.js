@@ -18,9 +18,7 @@ exports.save = function (req, callback) {
 
     DB('users')
         .insert(User)
-        .then(function (data) {
-            console.log(data);
-        })
+        .then(function (data) {})
         .catch(function (error) {
             throw 'ERROR: unable to save user ' + error;
         });
@@ -62,7 +60,7 @@ exports.read = function (req, callback) {
 };
 
 /**
- * Updates user data by its API KEY
+ * Updates user data by its id and API KEY
  * @param req
  * @param callback
  */
@@ -109,25 +107,6 @@ exports.update = function (req, callback) {
 exports.authenticate = function (req, callback) {
 
     let User = req.body;
-
-    if (User === undefined) {
-        callback({
-            status: 400,
-            data: {
-                message: 'Bad Request'
-            }
-        });
-    }
-
-    if (User.username.length === 0 || User.password.length === 0) {
-        callback({
-            status: 401,
-            data: {
-                message: 'Authentication failed'
-            }
-        });
-        return false;
-    }
 
     DB('users')
         .where({
