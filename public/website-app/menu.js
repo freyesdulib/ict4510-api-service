@@ -46,9 +46,15 @@ const menuModule = (function () {
         let html = '';
 
         for (let i = 0;i<menu.length;i++) {
-            let image = Math.floor(Math.random() * (images.length + 1));
+
+            let index = Math.floor(Math.random() * (images.length));
+
+            if (index === 0) {
+                index = index + 1;
+            }
+
             html += `<div class="tm-product">
-            <img src="website-assets/img/menu-${image}.jpg" alt="Product">
+            <img src="website-assets/img/${images[index]}" alt="Product">
             <div class="tm-product-text">
             <h3 class="tm-product-title">${menu[i].item}</h3>
             <p class="tm-product-description">${menu[i].description}</p>
