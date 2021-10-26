@@ -42,11 +42,13 @@ const menuModule = (function () {
             return false;
         }
 
+        let images = ['menu-1.jpg', 'menu-2.jpg', 'menu-3.jpg', 'menu-4.jpg', 'menu-5.jpg'];
         let html = '';
-        // TODO: randomize images  menu-1.jpg - 5 total
+
         for (let i = 0;i<menu.length;i++) {
+            let image = Math.floor(Math.random() * (images.length + 1));
             html += `<div class="tm-product">
-            <img src="website-assets/img/menu-1.jpg" alt="Product">
+            <img src="website-assets/img/menu-${image}.jpg" alt="Product">
             <div class="tm-product-text">
             <h3 class="tm-product-title">${menu[i].item}</h3>
             <p class="tm-product-description">${menu[i].description}</p>
@@ -58,7 +60,7 @@ const menuModule = (function () {
         }
 
         document.querySelector('#menu').innerHTML = html;
-    }
+    };
 
     obj.init = function () {
         get_menu_items();
