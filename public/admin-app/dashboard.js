@@ -21,6 +21,15 @@ const dashboardModule = (function () {
     let obj = {};
 
     const display_profile_info = function () {
+
+        let images = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png'];
+        let index = Math.floor(Math.random() * (images.length));
+
+        if (index === 0) {
+            index = index + 1;
+        }
+
+        document.querySelector('#user-image').src = `admin-assets/img/${images[index]}`;
         document.querySelector('#profile-user').innerHTML = `${User.user.first_name} ${User.user.last_name} `;
         document.querySelector('#profile-username').innerHTML = `Username: ${User.user.username}`;
         document.querySelector('#profile-api-key').innerHTML = `API KEY: ${User.user.api_key}`;
