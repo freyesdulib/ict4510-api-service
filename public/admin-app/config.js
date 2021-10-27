@@ -39,8 +39,6 @@ const configModule = (function () {
             url = 'http://localhost:3000/';
         }
 
-        console.log(window.location.hostname);
-
         return url;
     };
 
