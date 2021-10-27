@@ -33,13 +33,13 @@ const configModule = (function () {
 
         let url ='https://ict4510.herokuapp.com/';
 
-        if (window.location.hostname === 'ondigitalocean') {
+        if (window.location.hostname === 'ict-4510-api-service-nq86b.ondigitalocean.app') {
             url = 'https://ict-4510-api-service-nq86b.ondigitalocean.app/';
         } else if(window.location.hostname === 'localhost') {
             url = 'http://localhost:3000/';
         }
 
-        console.log(url);
+        console.log(window.location.hostname);
 
         return url;
     };
