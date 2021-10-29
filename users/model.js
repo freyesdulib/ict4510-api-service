@@ -56,6 +56,10 @@ exports.read = function (req, callback) {
 
     let api_key = req.query.api_key;
 
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
+
     DB('users')
         .where({
             api_key: api_key
@@ -84,6 +88,10 @@ exports.update = function (req, callback) {
 
     let api_key = req.query.api_key,
         User = req.body;
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
 
     if (User === undefined) {
         callback({
