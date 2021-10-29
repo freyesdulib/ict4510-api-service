@@ -37,7 +37,7 @@ exports.verify = function (req, res, next) {
 
     let token = req.headers['x-access-token'] || req.query.t;
     let key = req.query.api_key;
-    token = 'eyJzdWIiOiJmcmV5ZXMiLCJpc3MiOiJpY3Q0NTEwLmR1LmVkdSIsImlhdCI6MTYzNTUzMzE3MywiZXhwIjoxNjM1NTYxOTczfQ.PC0dLRkB-vfiIDyl1ciDPaZ-UvNZcxZ7pO0m8laqfKqRDz_lnfug8qziiL7sNzu4kEWgt3dghlUIwBj2VYVNzg';
+
     if (token !== undefined && VALIDATOR.isJWT(token)) {
 
         JWT.verify(token, CONFIG.secretKey, function (error, decoded) {
