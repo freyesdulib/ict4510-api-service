@@ -31,6 +31,7 @@ exports.save = function (req, callback) {
     let User = req.body;
     User.password = BCRYPT.encrypt(User.password);
     User.api_key = KEYGEN();
+    User.username = User.username.toLowerCase();
 
     DB('users')
         .insert(User)
