@@ -25,6 +25,7 @@
     "knex": "^0.95.11",
     "level": "^7.0.1",
     "method-override": "^3.0.0",
-    "mysql2": "^1.7.0"
+    "mysql2": "^1.7.0",
+    "validator": "^13.6.0"
   }
 }

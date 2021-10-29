@@ -60,6 +60,10 @@ exports.read = function (req, callback) {
     let id = req.query.id;
     let whereObj = {};
 
+    if (Array.isArray(id)) {
+        id = id.pop();
+    }
+
     whereObj.api_key = api_key;
 
     if (id !== undefined) {

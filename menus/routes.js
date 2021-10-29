@@ -25,6 +25,6 @@ module.exports = function (app) {
     app.route('/api/menus')
         .post(TOKEN.verify, FIELDS.validate_menu_item, MENUS.save)
         .get(TOKEN.verify, MENUS.read)
-        .put(TOKEN.verify, FIELDS.validate_menu_item, MENUS.update)
+        .put(TOKEN.verify, FIELDS.validate_menu_item_update, MENUS.update)
         .delete(TOKEN.verify, MENUS.delete);
 };

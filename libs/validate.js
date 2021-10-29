@@ -21,7 +21,7 @@ const ajv = new Ajv();
 
 const VALIDATE_JSON = function (data, properties, required_properties) {
 
-    let errors = [];
+    let errors = '';
     let schema = {
         type: 'object',
         properties: properties,
@@ -33,7 +33,7 @@ const VALIDATE_JSON = function (data, properties, required_properties) {
     const IS_VALID = VALIDATE_SCHEMA(data);
 
     if (!IS_VALID) {
-        errors.push(VALIDATE_SCHEMA.errors);
+        errors = VALIDATE_SCHEMA.errors;
     }
 
     return errors;
@@ -64,7 +64,11 @@ exports.validate_auth = function (req, res, next) {
     };
 
     let required_properties = ['username', 'password'];
-    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
+    let error = VALIDATE_JSON(req.body, properties, required_properties);
+
+    if (error.length > 0) {
+        errors.push(error);
+    }
 
     if (req.body.username === undefined) {
         errors.push({
@@ -126,7 +130,11 @@ exports.validate_user = function (req, res, next) {
     };
 
     let required_properties = ['first_name', 'last_name', 'username', 'password'];
-    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
+    let error = VALIDATE_JSON(req.body, properties, required_properties);
+
+    if (error.length > 0) {
+        errors.push(error);
+    }
 
     if (req.body.username === undefined) {
         errors.push({
@@ -208,7 +216,98 @@ exports.validate_menu_item = function (req, res, next) {
     };
 
     let required_properties = ['item', 'description', 'price'];
-    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
+    let error = VALIDATE_JSON(req.body, properties, required_properties);
+
+    if (error.length > 0) {
+        errors.push(error);
+    }
+
+    if (req.body.item === undefined) {
+        errors.push({
+            field: 'item',
+            message: 'item field is missing.'
+        });
+    } else if (req.body.item.length === 0 && req.body.item.length < 4) {
+        errors.push({
+            field: 'item',
+            message: 'Item is required'
+        });
+    }
+
+    if (req.body.description === undefined) {
+        errors.push('description field is missing.');
+    } else if (req.body.description.length === 0 && req.body.description.length < 3) {
+        errors.push({
+            field: 'description',
+            message: 'Description is required.'
+        });
+    }
+
+    if (req.body.price === undefined) {
+        errors.push({
+            field: 'price',
+            message: 'price field is missing.'
+        });
+    } else if (req.body.price.length === 0 && req.body.price.length < 3) {
+        errors.push({
+            field: 'price',
+            message: 'Price is required.'
+        });
+    }
+
+    if (errors.length === 0) {
+        next();
+    } else {
+        res.status(400).json({
+            errors: errors
+        });
+    }
+};
+
+/**
+ * Validates menu item input fields for updates
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.validate_menu_item_update = function (req, res, next) {
+
+    let errors = [];
+
+    if (req.body === undefined) {
+        errors.push({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    }
+
+    let properties = {
+        id: {type: 'string'},
+        item: {type: 'string'},
+        description: {type: 'string'},
+        price: {type: 'string'}
+    };
+
+    let required_properties = ['id', 'item', 'description', 'price'];
+    let error = VALIDATE_JSON(req.body, properties, required_properties);
+
+    if (error.length > 0) {
+        errors.push(error);
+    }
+
+    if (req.body.id === undefined) {
+        errors.push({
+            field: 'id',
+            message: 'id field is missing.'
+        });
+    } else if (req.body.id.length === 0) {
+        errors.push({
+            field: 'id',
+            message: 'id is required'
+        });
+    }
 
     if (req.body.item === undefined) {
         errors.push({
