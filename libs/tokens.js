@@ -17,8 +17,8 @@
 'use strict';
 
 const JWT = require('jsonwebtoken'),
-    CONFIG = require('../config/config');
-const VALIDATOR = require("validator");
+    CONFIG = require('../config/config'),
+    VALIDATOR = require("validator");
 
 exports.create = function (username) {
 
