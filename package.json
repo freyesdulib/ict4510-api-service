@@ -1,6 +1,6 @@
 {
   "name": "ict4510api",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "API service for ICT4510 course",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "fernando.reyes@du.edu",
   "license": "MIT",
   "dependencies": {
+    "ajv": "^8.6.3",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",

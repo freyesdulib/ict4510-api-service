@@ -16,6 +16,29 @@
 
 'use strict';
 
+const Ajv = require('ajv');
+const ajv = new Ajv();
+
+const VALIDATE_JSON = function (data, properties, required_properties) {
+
+    let errors = [];
+    let schema = {
+        type: 'object',
+        properties: properties,
+        required: required_properties,
+        additionalProperties: false
+    };
+
+    const VALIDATE_SCHEMA = ajv.compile(schema);
+    const IS_VALID = VALIDATE_SCHEMA(data);
+
+    if (!IS_VALID) {
+        errors.push(VALIDATE_SCHEMA.errors);
+    }
+
+    return errors;
+};
+
 /**
  * Validates auth input fields
  * @param req
@@ -34,6 +57,14 @@ exports.validate_auth = function (req, res, next) {
             }
         });
     }
+
+    let properties = {
+        username: {type: 'string'},
+        password: {type: 'string'}
+    };
+
+    let required_properties = ['username', 'password'];
+    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
 
     if (req.body.username === undefined) {
         errors.push({
@@ -86,6 +117,16 @@ exports.validate_user = function (req, res, next) {
             }
         });
     }
+
+    let properties = {
+        first_name: {type: 'string'},
+        last_name: {type: 'string'},
+        username: {type: 'string'},
+        password: {type: 'string'}
+    };
+
+    let required_properties = ['first_name', 'last_name', 'username', 'password'];
+    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
 
     if (req.body.username === undefined) {
         errors.push({
@@ -159,6 +200,15 @@ exports.validate_menu_item = function (req, res, next) {
             }
         });
     }
+
+    let properties = {
+        item: {type: 'string'},
+        description: {type: 'string'},
+        price: {type: 'string'}
+    };
+
+    let required_properties = ['item', 'description', 'price'];
+    errors.push(VALIDATE_JSON(req.body, properties, required_properties));
 
     if (req.body.item === undefined) {
         errors.push({
