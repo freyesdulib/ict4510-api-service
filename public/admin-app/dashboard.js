@@ -336,18 +336,6 @@ const dashboardModule = (function () {
             });
     };
 
-    function attach_save() {
-        save_menu_item();
-    }
-
-    function attach_update() {
-        update_menu_item();
-    }
-
-    function attach_delete() {
-        delete_menu_item();
-    }
-
     function logout () {
         // clear local storage
         window.localStorage.removeItem('user');
@@ -356,17 +344,17 @@ const dashboardModule = (function () {
     }
 
     const attach_onclick_save = function() {
-        document.querySelector('#save-menu-item-button').removeEventListener('click', attach_update, false);
-        document.querySelector('#save-menu-item-button').addEventListener('click', attach_save);
+        document.querySelector('#save-menu-item-button').removeEventListener('click', update_menu_item, false);
+        document.querySelector('#save-menu-item-button').addEventListener('click', save_menu_item);
     };
 
     const attach_onclick_update = function () {
-        document.querySelector('#save-menu-item-button').removeEventListener('click', attach_save, false);
-        document.querySelector('#save-menu-item-button').addEventListener('click', attach_update);
+        document.querySelector('#save-menu-item-button').removeEventListener('click', save_menu_item, false);
+        document.querySelector('#save-menu-item-button').addEventListener('click', update_menu_item);
     };
 
     const attach_onclick_delete = function () {
-        document.querySelector('#delete-menu-item-button').addEventListener('click', attach_delete);
+        document.querySelector('#delete-menu-item-button').addEventListener('click', delete_menu_item);
     };
 
     const attach_onclick_logout = function () {
