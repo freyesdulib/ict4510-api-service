@@ -28,6 +28,15 @@ const DB = require('../config/db')(),
  */
 exports.save = function (req, callback) {
 
+    if (req.body === undefined) {
+        callback({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    }
+
     let User = req.body;
     User.password = BCRYPT.encrypt(User.password);
     User.api_key = KEYGEN();
@@ -57,6 +66,10 @@ exports.read = function (req, callback) {
 
     let api_key = req.query.api_key;
 
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
+
     DB('users')
         .where({
             api_key: api_key
@@ -83,16 +96,20 @@ exports.read = function (req, callback) {
  */
 exports.update = function (req, callback) {
 
-    let api_key = req.query.api_key,
-        User = req.body;
-
-    if (User === undefined) {
+    if (req.body === undefined) {
         callback({
             status: 400,
             data: {
                 message: 'Bad Request'
             }
         });
+    }
+
+    let api_key = req.query.api_key,
+        User = req.body;
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
     }
 
     let id = User.id;
@@ -122,6 +139,15 @@ exports.update = function (req, callback) {
  * @returns {boolean}
  */
 exports.authenticate = function (req, callback) {
+
+    if (req.body === undefined) {
+        callback({
+            status: 400,
+            data: {
+                message: 'Bad Request'
+            }
+        });
+    }
 
     let User = req.body;
 
