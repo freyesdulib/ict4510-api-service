@@ -25,10 +25,7 @@ const DB = require('../config/db')();
  */
 exports.save = function (req, callback) {
 
-    let Menu = req.body;
-    Menu.api_key = req.query.api_key;
-
-    if (Menu === undefined || Menu.api_key.length === 0) {
+    if (req.body === undefined) {
         callback({
             status: 400,
             data: {
@@ -36,6 +33,15 @@ exports.save = function (req, callback) {
             }
         });
     }
+
+    let api_key = req.query.api_key;
+    let Menu = req.body;
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
+
+    Menu.api_key = api_key;
 
     DB('menus')
         .insert(Menu)
@@ -59,6 +65,10 @@ exports.read = function (req, callback) {
     let api_key = req.query.api_key;
     let id = req.query.id;
     let whereObj = {};
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
 
     if (Array.isArray(id)) {
         id = id.pop();
@@ -89,16 +99,24 @@ exports.read = function (req, callback) {
 
 exports.update = function (req, callback) {
 
-    let api_key = req.query.api_key;
-    let Menu = req.body;
-
-    if (Menu.id === undefined) {
+    if (req.body.id === undefined) {
         callback({
             status: 400,
             data: {
                 message: 'Bad Request'
             }
         });
+    }
+
+    let api_key = req.query.api_key;
+    let Menu = req.body;
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
     }
 
     let id = Menu.id;
@@ -123,16 +141,24 @@ exports.update = function (req, callback) {
 
 exports.delete = function (req, callback) {
 
-    let api_key = req.query.api_key;
-    let id = req.query.id;
-
-    if (id === undefined) {
+    if (req.query.id === undefined) {
         callback({
             status: 400,
             data: {
                 message: 'Bad Request'
             }
         });
+    }
+
+    let api_key = req.query.api_key;
+    let id = req.query.id;
+
+    if (Array.isArray(api_key)) {
+        api_key = api_key.pop();
+    }
+
+    if (Array.isArray(id)) {
+        id = id.pop();
     }
 
     DB('menus')
