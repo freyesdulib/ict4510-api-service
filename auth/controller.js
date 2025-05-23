@@ -23,3 +23,9 @@ exports.authenticate = function (req, res) {
         res.status(data.status).send(data.data);
     });
 };
+
+exports.create_user = function (req, res) {
+    USERS.save(req, function (data) { // Changed USERS.create to USERS.save
+        res.status(data.status).send(data.data);
+    });
+};

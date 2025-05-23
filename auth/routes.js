@@ -23,4 +23,7 @@ module.exports = function (app) {
 
     app.route('/api/login')
         .post(FIELDS.validate_auth, AUTH.authenticate);
+
+    app.route('/api/register')
+        .post(FIELDS.validate_user, AUTH.create_user);
 };
