@@ -44,17 +44,23 @@ exports.save = function (req, callback) {
 
     DB('users')
         .insert(User)
-        .then(function (data) {})
+        .then(function (data) {
+            callback({
+                status: 201,
+                data: {
+                    message: 'User saved'
+                }
+            });
+        })
         .catch(function (error) {
-            throw 'ERROR: unable to save user ' + error;
+            console.error('ERROR: unable to save user', error); // Log the error
+            callback({
+                status: 500, // Internal Server Error
+                data: {
+                    message: 'Error saving user'
+                }
+            });
         });
-
-    callback({
-        status: 201,
-        data: {
-            message: 'User saved'
-        }
-    });
 };
 
 /**

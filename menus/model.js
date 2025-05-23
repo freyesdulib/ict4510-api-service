@@ -46,18 +46,24 @@ exports.save = function (req, callback) {
     DB('menus')
         .insert(Menu)
         .then(function (data) {
-            console.log(data);
+            // console.log(data); // Optional: remove or keep for debugging
+            callback({
+                status: 201,
+                data: {
+                    message: 'Menu saved',
+                    id: data[0] // Return the id of the inserted menu item
+                }
+            });
         })
         .catch(function (error) {
-            throw 'ERROR: unable to save menu ' + error;
+            console.error('ERROR: unable to save menu', error);
+            callback({
+                status: 500,
+                data: {
+                    message: 'Error saving menu'
+                }
+            });
         });
-
-    callback({
-        status: 201,
-        data: {
-            message: 'Menu saved'
-        }
-    });
 };
 
 exports.read = function (req, callback) {
