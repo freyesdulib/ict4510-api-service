@@ -39,6 +39,17 @@ http://localhost:3000/       (Public)
 http://localhost:3000/login  (Admin)
 ```
 
+### Build Process
+
+This project uses Gulp to minify JavaScript assets for production. The minified files are used when the application is running in a production environment (`NODE_ENV=production`).
+
+- **Install Dependencies**: If you haven't already, run `npm install` to install all dependencies, including the development dependencies required for the build process (Gulp and its plugins).
+- **Run Minification**: To minify the JavaScript files, run the following command:
+  ```bash
+  npm run minify
+  ```
+  This command will process JavaScript files in `public/admin-app/` and `public/website-app/`, creating corresponding `.min.js` files in the same directories (e.g., `public/admin-app/example.js` will be minified to `public/admin-app/example.min.js`).
+
 ### Maintainers
 
 @freyesdulib
