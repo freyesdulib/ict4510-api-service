@@ -16,33 +16,74 @@
 
 /**
  * ICT4510 final project example
- * config module returns api url
+ * Config module - returns API URL based on environment
  */
 
 'use strict';
 
 const configModule = (function () {
 
-    let obj = {};
+    const ENVIRONMENTS = Object.freeze({
+        production: 'https://ict4510.herokuapp.com/',
+        digitalocean: 'https://ict-4510-api-service-nq86b.ondigitalocean.app/',
+        localhost: 'http://localhost:3000/'
+    });
 
-    /**
-     * Returns api url based on current domain
-     * @returns {string} url
-     */
-    obj.get_api_url = function () {
+    const HOSTNAME_MAP = Object.freeze({
+        'ict-4510-api-service-nq86b.ondigitalocean.app': 'digitalocean',
+        'localhost': 'localhost',
+        '127.0.0.1': 'localhost'
+    });
 
-        let url ='https://ict4510.herokuapp.com/';
+    const DEFAULT_TIMEOUT_MS = 10000;
 
-        if (window.location.hostname === 'ict-4510-api-service-nq86b.ondigitalocean.app') {
-            url = 'https://ict-4510-api-service-nq86b.ondigitalocean.app/';
-        } else if(window.location.hostname === 'localhost') {
-            url = 'http://localhost:3000/';
-        }
+    const api = Object.freeze({
 
-        return url;
-    };
+        /**
+         * Returns API URL based on current hostname
+         * @returns {string} The API base URL
+         */
+        get_api_url: function () {
+            const hostname = window.location.hostname || '';
+            const environment = HOSTNAME_MAP[hostname] || 'production';
+            return ENVIRONMENTS[environment];
+        },
 
-    obj.init = function () {};
-    return obj;
+        /**
+         * Returns the default request timeout in milliseconds
+         * @returns {number} Timeout value
+         */
+        get_timeout: function () {
+            return DEFAULT_TIMEOUT_MS;
+        },
+
+        /**
+         * Validates that a URL belongs to allowed API origins
+         * @param {string} url - URL to validate
+         * @returns {boolean} True if URL is from allowed origin
+         */
+        is_valid_api_url: function (url) {
+            if (typeof url !== 'string' || !url) {
+                return false;
+            }
+
+            try {
+                const parsed_url = new URL(url);
+                const allowed_origins = Object.values(ENVIRONMENTS).map(function (env_url) {
+                    return new URL(env_url).origin;
+                });
+                return allowed_origins.indexOf(parsed_url.origin) !== -1;
+            } catch (e) {
+                return false;
+            }
+        },
+
+        /**
+         * Initialization hook
+         */
+        init: function () {}
+    });
+
+    return api;
 
 }());

@@ -16,62 +16,202 @@
 
 /**
  * ICT4510 final project example
- * Home page module
+ * Home page module - refactored for security, efficiency, and reliability
  */
 
 'use strict';
 
 const homeModule = (function () {
 
+    /* ------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------ */
     const API_KEY = configModule.get_api_key();
-    const URL = configModule.get_api_url() + 'api/menus?api_key=' + API_KEY;
-    let obj = {};
+    const MENU_ENDPOINT = configModule.get_api_url() + 'api/menus?api_key=' + encodeURIComponent(API_KEY);
+    const REQUEST_TIMEOUT_MS = 10000;
+
+    /* ------------------------------------------------------------------
+     * State
+     * ------------------------------------------------------------------ */
+    let abort_controller = null;
+
+    /* ------------------------------------------------------------------
+     * DOM cache - initialized lazily
+     * ------------------------------------------------------------------ */
+    let dom = null;
+
+    function get_dom() {
+        if (dom !== null) {
+            return dom;
+        }
+
+        dom = {
+            menu: document.querySelector('#menu')
+        };
+
+        return dom;
+    }
+
+    /* ------------------------------------------------------------------
+     * Message display
+     * ------------------------------------------------------------------ */
 
     /**
-     * Gets menu items
+     * Displays an info/error message in the menu container
+     * @param {string} text - Message text
+     * @param {string} type - Message type: 'info', 'danger', 'warning'
      */
-    const get_menu_items = function () {
+    function show_message(text, type) {
+        const elements = get_dom();
 
-        fetch(URL)
+        if (!elements.menu) {
+            return;
+        }
+
+        // Clear existing content
+        while (elements.menu.firstChild) {
+            elements.menu.removeChild(elements.menu.firstChild);
+        }
+
+        const alert_div = document.createElement('div');
+        alert_div.className = 'alert alert-' + type;
+
+        const small = document.createElement('small');
+        small.textContent = text;
+
+        alert_div.appendChild(small);
+        elements.menu.appendChild(alert_div);
+    }
+
+    /* ------------------------------------------------------------------
+     * Menu display
+     * ------------------------------------------------------------------ */
+
+    /**
+     * Creates a list item element for a menu item
+     * @param {Object} item - Menu item data
+     * @returns {HTMLLIElement} List item element
+     */
+    function create_menu_item(item) {
+        const li = document.createElement('li');
+        li.textContent = item.item || '';
+        return li;
+    }
+
+    /**
+     * Displays menu items in the menu container
+     * @param {Array} menu - Array of menu item objects
+     */
+    function display_menu_items(menu) {
+        const elements = get_dom();
+
+        if (!elements.menu) {
+            return;
+        }
+
+        // Clear existing content
+        while (elements.menu.firstChild) {
+            elements.menu.removeChild(elements.menu.firstChild);
+        }
+
+        if (!Array.isArray(menu) || menu.length === 0) {
+            show_message('Sorry! No daily menu today.', 'info');
+            return;
+        }
+
+        // Create list and append items
+        menu.forEach(function (item) {
+            if (item && item.item) {
+                const li = create_menu_item(item);
+                elements.menu.appendChild(li);
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------
+     * API operations
+     * ------------------------------------------------------------------ */
+
+    /**
+     * Fetches menu items from the API
+     */
+    function get_menu_items() {
+        // Cancel any in-flight request
+        if (abort_controller) {
+            abort_controller.abort();
+        }
+
+        abort_controller = new AbortController();
+
+        const timeout_id = setTimeout(function () {
+            if (abort_controller) {
+                abort_controller.abort();
+            }
+        }, REQUEST_TIMEOUT_MS);
+
+        fetch(MENU_ENDPOINT, {
+            method: 'GET',
+            signal: abort_controller.signal,
+            credentials: 'same-origin'
+        })
             .then(function (response) {
+                clearTimeout(timeout_id);
 
-                if (response.status === 200) {
-                    return response.json();
+                if (!response.ok) {
+                    throw new Error('Failed to load menu');
                 }
 
+                return response.json();
             })
             .then(function (json) {
-                display_menu_items(json.menu);
+                if (json && json.menu) {
+                    display_menu_items(json.menu);
+                } else {
+                    display_menu_items([]);
+                }
+            })
+            .catch(function (error) {
+                clearTimeout(timeout_id);
+
+                if (error.name === 'AbortError') {
+                    show_message('Request timed out. Please refresh the page.', 'warning');
+                    return;
+                }
+
+                show_message('Unable to load menu. Please try again later.', 'danger');
             });
-    };
+    }
 
-    /**
-     * Renders repository stats on home page
-     * @param menu
-     */
-    const display_menu_items = function (menu) {
+    /* ------------------------------------------------------------------
+     * Public API
+     * ------------------------------------------------------------------ */
+    const api = {
 
-        if (menu.length === 0) {
-            document.querySelector('#menu').innerHTML = '<div class="alert alert-info"><small>Sorry!, no daily menu today.</small></div>';
-            return false;
+        /**
+         * Initializes the home module
+         */
+        init: function () {
+            // Ensure DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    api.init();
+                });
+                return;
+            }
+
+            get_menu_items();
         }
-
-        let html = '';
-
-        for (let i = 0;i<menu.length;i++) {
-            html += `<li>${menu[i].item}</li>`;
-        }
-
-        document.querySelector('#menu').innerHTML = html;
     };
 
-    obj.init = function () {
-        get_menu_items();
-    };
-
-    return obj;
+    return api;
 
 }());
 
-// init function calls get_menu_items() function when the page loads
-homeModule.init();
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+        homeModule.init();
+    });
+} else {
+    homeModule.init();
+}
