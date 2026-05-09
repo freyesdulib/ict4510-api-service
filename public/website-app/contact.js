@@ -39,7 +39,7 @@ const contactModule = (function () {
     const MAPBOX_CONFIG = Object.freeze({
         tile_url: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
         style_id: 'mapbox/streets-v11',
-        access_token: 'pk.eyJ1IjoiZmVybmFuZG8tcmV5ZXMiLCJhIjoiY2p0ajY0NDN2MHNkeTN5cDUzczJrZzc4MCJ9.hUSeWuhT2aXnGdbowhXFqA',
+        access_token: 'your-access-token',
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
     });
 
