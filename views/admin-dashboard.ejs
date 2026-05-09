@@ -90,12 +90,14 @@
                             <p id="profile-username"></p>
                         </a>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a href="https://github.com/freyesdulib/ict4510-api-service" class="nav-link" target="_blank">
                             <i class="nav-icon fas fa-file-code"></i>
                             <p>App Source Code</p>
                         </a>
                     </li>
+                    -->
                     <li class="nav-item">
                         <a href="https://app.swaggerhub.com/apis-docs/ict4510-course/ict4510/1.0.0#/" class="nav-link" target="_blank">
                             <i class="nav-icon fas fa-file"></i>
@@ -256,15 +258,7 @@
 <script src="admin-assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="admin-assets/js/adminlte.js"></script>
-<% if (process.env.NODE_ENV === 'production') { %>
-  <script src="/admin-app/config.min.js"></script>
-<% } else { %>
-  <script src="/admin-app/config.js"></script>
-<% } %>
-<% if (process.env.NODE_ENV === 'production') { %>
-  <script src="/admin-app/dashboard.min.js"></script>
-<% } else { %>
-  <script src="/admin-app/dashboard.js"></script>
-<% } %>
+<script src="admin-app/config.js"></script>
+<script src="admin-app/dashboard.js"></script>
 </body>
 </html>

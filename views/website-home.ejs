@@ -215,15 +215,7 @@
 <!-- JS -->
 <script type="text/javascript" src="website-assets/js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
 <script type="text/javascript" src="website-assets/js/templatemo-script.js"></script>      <!-- Templatemo Script -->
-<% if (process.env.NODE_ENV === 'production') { %>
-  <script type="text/javascript" src="/website-app/config.min.js"></script>
-<% } else { %>
-  <script type="text/javascript" src="/website-app/config.js"></script>
-<% } %>
-<% if (process.env.NODE_ENV === 'production') { %>
-  <script type="text/javascript" src="/website-app/home.min.js"></script>
-<% } else { %>
-  <script type="text/javascript" src="/website-app/home.js"></script>
-<% } %>
+<script type="text/javascript" src="website-app/config.js"></script>
+<script type="text/javascript" src="website-app/home.js"></script>
 </body>
 </html>

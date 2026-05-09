@@ -35,3 +35,7 @@ exports.get_login_page = function (req, res) {
 exports.get_dashboard_page = function (req, res) {
     res.render('admin-dashboard');
 };
+
+exports.get_dashboard_user_form = function (req, res) {
+    res.render('admin-create-user');
+};

@@ -34,4 +34,7 @@ module.exports = function (app) {
 
     app.route('/dashboard')
         .get(WEBSITE.get_dashboard_page);
+
+    app.route('/dashboard/users')
+        .get(WEBSITE.get_dashboard_user_form);
 };

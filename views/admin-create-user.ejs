@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 450px;
+            margin-top: 40px;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            margin: 0 0 24px 0;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        label .required {
+            color: #e53935;
+            margin-left: 2px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        input.error {
+            border-color: #e53935;
+        }
+
+        input.error:focus {
+            box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .field-error {
+            font-size: 12px;
+            color: #e53935;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-error.visible {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #2196f3;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1976d2;
+        }
+
+        .btn:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.visible {
+            display: block;
+        }
+
+        .message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .name-row .form-group {
+            flex: 1;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle input {
+            padding-right: 40px;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Create Account</h1>
+    <p class="subtitle">Enter your information to create a new user account.</p>
+
+    <div id="message" class="message"></div>
+
+    <form id="user-form" novalidate>
+        <div class="form-group">
+            <label for="username">
+                Username<span class="required">*</span>
+            </label>
+            <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    autocomplete="username"
+                    placeholder="Enter username"
+                    required
+            >
+            <div class="field-hint">3-50 characters: letters, numbers, underscores, dots, or hyphens</div>
+            <div class="field-error" id="username-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">
+                Password<span class="required">*</span>
+            </label>
+            <div class="password-toggle">
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="new-password"
+                        placeholder="Enter password"
+                        required
+                >
+                <button type="button" class="toggle-btn" id="toggle-password" aria-label="Toggle password visibility">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <div class="field-hint">8-128 characters</div>
+            <div class="field-error" id="password-error"></div>
+        </div>
+
+        <div class="name-row">
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        autocomplete="given-name"
+                        placeholder="First name"
+                >
+                <div class="field-error" id="first_name-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        autocomplete="family-name"
+                        placeholder="Last name"
+                >
+                <div class="field-error" id="last_name-error"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">Create Account</button>
+    </form>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        /**
+         * Configuration
+         */
+        const CONFIG = {
+            API_ENDPOINT: '/api/users',
+            USERNAME_MIN: 3,
+            USERNAME_MAX: 50,
+            PASSWORD_MIN: 8,
+            PASSWORD_MAX: 128,
+            NAME_MAX: 100,
+            USERNAME_PATTERN: /^[a-z0-9_.-]+$/i
+        };
+
+        /**
+         * DOM Elements
+         */
+        const elements = {
+            form: document.getElementById('user-form'),
+            message: document.getElementById('message'),
+            submit_btn: document.getElementById('submit-btn'),
+            toggle_password: document.getElementById('toggle-password'),
+            fields: {
+                username: document.getElementById('username'),
+                password: document.getElementById('password'),
+                first_name: document.getElementById('first_name'),
+                last_name: document.getElementById('last_name')
+            }
+        };
+
+        /**
+         * Validation functions
+         */
+        const validators = {
+            username: function(value) {
+                const trimmed = value.trim();
+                if (!trimmed) {
+                    return 'Username is required';
+                }
+                if (trimmed.length < CONFIG.USERNAME_MIN) {
+                    return 'Username must be at least ' + CONFIG.USERNAME_MIN + ' characters';
+                }
+                if (trimmed.length > CONFIG.USERNAME_MAX) {
+                    return 'Username must be ' + CONFIG.USERNAME_MAX + ' characters or less';
+                }
+                if (!CONFIG.USERNAME_PATTERN.test(trimmed)) {
+                    return 'Username can only contain letters, numbers, underscores, dots, or hyphens';
+                }
+                return null;
+            },
+
+            password: function(value) {
+                if (!value) {
+                    return 'Password is required';
+                }
+                if (value.length < CONFIG.PASSWORD_MIN) {
+                    return 'Password must be at least ' + CONFIG.PASSWORD_MIN + ' characters';
+                }
+                if (value.length > CONFIG.PASSWORD_MAX) {
+                    return 'Password must be ' + CONFIG.PASSWORD_MAX + ' characters or less';
+                }
+                return null;
+            },
+
+            first_name: function(value) {
+                if (value && value.trim().length > CONFIG.NAME_MAX) {
+                    return 'First name must be ' + CONFIG.NAME_MAX + ' characters or less';
+                }
+                return null;
+            },
+
+            last_name: function(value) {
+                if (value && value.trim().length > CONFIG.NAME_MAX) {
+                    return 'Last name must be ' + CONFIG.NAME_MAX + ' characters or less';
+                }
+                return null;
+            }
+        };
+
+        /**
+         * Shows field error
+         * @param {string} field_name - Field name
+         * @param {string} message - Error message
+         */
+        function show_field_error(field_name, message) {
+            const field = elements.fields[field_name];
+            const error_el = document.getElementById(field_name + '-error');
+
+            if (field && error_el) {
+                field.classList.add('error');
+                error_el.textContent = message;
+                error_el.classList.add('visible');
+            }
+        }
+
+        /**
+         * Clears field error
+         * @param {string} field_name - Field name
+         */
+        function clear_field_error(field_name) {
+            const field = elements.fields[field_name];
+            const error_el = document.getElementById(field_name + '-error');
+
+            if (field && error_el) {
+                field.classList.remove('error');
+                error_el.textContent = '';
+                error_el.classList.remove('visible');
+            }
+        }
+
+        /**
+         * Clears all field errors
+         */
+        function clear_all_errors() {
+            Object.keys(elements.fields).forEach(clear_field_error);
+        }
+
+        /**
+         * Shows message
+         * @param {string} text - Message text
+         * @param {string} type - Message type ('success' or 'error')
+         */
+        function show_message(text, type) {
+            elements.message.textContent = text;
+            elements.message.className = 'message visible ' + type;
+        }
+
+        /**
+         * Hides message
+         */
+        function hide_message() {
+            elements.message.className = 'message';
+        }
+
+        /**
+         * Sets loading state
+         * @param {boolean} is_loading - Loading state
+         */
+        function set_loading(is_loading) {
+            elements.submit_btn.disabled = is_loading;
+
+            if (is_loading) {
+                elements.submit_btn.classList.add('btn-loading');
+            } else {
+                elements.submit_btn.classList.remove('btn-loading');
+            }
+        }
+
+        /**
+         * Validates all fields
+         * @returns {boolean} - Whether all fields are valid
+         */
+        function validate_form() {
+            let is_valid = true;
+            clear_all_errors();
+
+            Object.keys(validators).forEach(function(field_name) {
+                const value = elements.fields[field_name].value;
+                const error = validators[field_name](value);
+
+                if (error) {
+                    show_field_error(field_name, error);
+                    is_valid = false;
+                }
+            });
+
+            return is_valid;
+        }
+
+        /**
+         * Gets form data
+         * @returns {Object} - Form data object
+         */
+        function get_form_data() {
+            const data = {
+                username: elements.fields.username.value.trim().toLowerCase(),
+                password: elements.fields.password.value
+            };
+
+            const first_name = elements.fields.first_name.value.trim();
+            const last_name = elements.fields.last_name.value.trim();
+
+            if (first_name) {
+                data.first_name = first_name;
+            }
+            if (last_name) {
+                data.last_name = last_name;
+            }
+
+            return data;
+        }
+
+        /**
+         * Resets form
+         */
+        function reset_form() {
+            elements.form.reset();
+            clear_all_errors();
+        }
+
+        /**
+         * Submits form data to API
+         * @param {Object} data - Form data
+         * @returns {Promise<Object>} - API response
+         */
+        async function submit_form(data) {
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            return {
+                ok: response.ok,
+                status: response.status,
+                data: result
+            };
+        }
+
+        /**
+         * Handles form submission
+         * @param {Event} event - Submit event
+         */
+        async function handle_submit(event) {
+            event.preventDefault();
+            hide_message();
+
+            if (!validate_form()) {
+                return;
+            }
+
+            const form_data = get_form_data();
+            set_loading(true);
+
+            try {
+                const response = await submit_form(form_data);
+
+                if (response.ok) {
+                    show_message('Account created successfully!', 'success');
+                    reset_form();
+                } else {
+                    const error_message = response.data.message || 'Failed to create account';
+                    show_message(error_message, 'error');
+
+                    if (response.status === 409) {
+                        show_field_error('username', 'This username is already taken');
+                    }
+                }
+            } catch (error) {
+                show_message('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                set_loading(false);
+            }
+        }
+
+        /**
+         * Handles password visibility toggle
+         */
+        function handle_password_toggle() {
+            const password_field = elements.fields.password;
+            const is_password = password_field.type === 'password';
+
+            password_field.type = is_password ? 'text' : 'password';
+
+            elements.toggle_password.innerHTML = is_password
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+        }
+
+        /**
+         * Handles field blur for validation
+         * @param {Event} event - Blur event
+         */
+        function handle_field_blur(event) {
+            const field_name = event.target.name;
+            const value = event.target.value;
+
+            if (validators[field_name]) {
+                const error = validators[field_name](value);
+
+                if (error) {
+                    show_field_error(field_name, error);
+                } else {
+                    clear_field_error(field_name);
+                }
+            }
+        }
+
+        /**
+         * Handles field input to clear errors
+         * @param {Event} event - Input event
+         */
+        function handle_field_input(event) {
+            const field_name = event.target.name;
+            clear_field_error(field_name);
+            hide_message();
+        }
+
+        /**
+         * Initialize event listeners
+         */
+        function init() {
+            elements.form.addEventListener('submit', handle_submit);
+            elements.toggle_password.addEventListener('click', handle_password_toggle);
+
+            Object.keys(elements.fields).forEach(function(field_name) {
+                const field = elements.fields[field_name];
+                field.addEventListener('blur', handle_field_blur);
+                field.addEventListener('input', handle_field_input);
+            });
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
