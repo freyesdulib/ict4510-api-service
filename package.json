@@ -4,18 +4,17 @@
   "description": "API service for ICT4510 course",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit",
-    "minify": "gulp"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "fernando.reyes@du.edu",
-  "license": "Apache",
+  "license": "MIT",
   "dependencies": {
     "ajv": "^8.6.3",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dompurify": "^2.3.3",
+    "dompurify": "^3.3.1",
     "dotenv": "^6.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
@@ -24,17 +23,9 @@
     "jsdom": "^18.0.0",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.0",
-    "level": "^7.0.1",
+    "log4js": "^6.9.1",
     "method-override": "^3.0.0",
-    "mysql2": "^1.7.0",
+    "mysql2": "^3.11.0",
     "validator": "^13.7.0"
-  },
-  "devDependencies": {
-    "chai": "^4.3.7",
-    "chai-http": "^4.3.0",
-    "gulp": "^5.0.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-uglify": "^3.0.2",
-    "mocha": "^10.2.0"
   }
 }
