@@ -50,8 +50,9 @@ module.exports = function () {
     APP.set('view engine', 'ejs');
     APP.use(CORS({
         'origin': '*',
-        'methods': 'GET,HEAD,PUT,PATCH,POST,OPTIONS,DELETE',
-        'preflightContinue': true
+        'methods': 'GET,HEAD,PUT,POST,OPTIONS,DELETE',
+        'allowedHeaders': ['Content-Type', 'x-access-token'],
+        'preflightContinue': false
     }));
 
     require('../website/routes')(APP);
